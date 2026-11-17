@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Reserva de canchas | Prototipo IHC</title>
+
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+
+  <body>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+    <div class="aplicacion">
+      <header class="cabecera">
+        <p class="marca">Canchas disponibles</p>
+        <p class="subtitulo">Encuentra tu próximo lugar para jugar</p>
+      </header>
+
+      <nav class="progreso" aria-label="Etapas de la reserva">
+        <ol>
+          <li id="paso-busqueda" aria-current="step">1. Buscar</li>
+          <li id="paso-eleccion">2. Elegir</li>
+          <li id="paso-confirmacion">3. Confirmar</li>
+        </ol>
+      </nav>
+
+      <main id="contenido">
+        <!-- Pantalla 1: búsqueda -->
+        <section id="inicio" class="pantalla" aria-labelledby="titulo-inicio">
+          <p class="antetitulo">Organiza tu próxima actividad</p>
+          <h1 id="titulo-inicio" tabindex="-1">Busca una cancha</h1>
+
+          <p class="introduccion">Selecciona dónde y cuándo quieres jugar.</p>
+
+          <form id="formulario-busqueda">
+            <div class="campo">
+              <label for="deporte">Deporte</label>
+              <select id="deporte" name="deporte" required>
+                <option value="">Selecciona un deporte</option>
+                <option value="Fútbol">Fútbol</option>
+                <option value="Básquetbol">Básquetbol</option>
+                <option value="Tenis">Tenis</option>
+                <option value="Vóleibol">Vóleibol</option>
+              </select>
+            </div>
+
+            <div class="campo">
+              <label for="comuna">Comuna</label>
+              <select id="comuna" name="comuna" required>
+                <option value="Todas">Todas las comunas</option>
+                <option value="Providencia">Providencia</option>
+                <option value="Ñuñoa">Ñuñoa</option>
+                <option value="Macul">Macul</option>
+                <option value="Las Condes">Las Condes</option>
+                <option value="San Joaquín">San Joaquín</option>
+              </select>
+            </div>
+
+            <div class="campo">
+              <label for="fecha">Fecha</label>
+              <input
+                id="fecha"
+                name="fecha"
+                type="date"
+                required
+                aria-describedby="ayuda-fecha"
+              />
+            </div>
+
+            <button class="boton principal ancho" type="submit">
+              Buscar canchas
+            </button>
+          </form>
+        </section>
+
+        <!-- Pantalla 2: resultados -->
+        <section
+          id="resultados"
+          class="pantalla"
+          aria-labelledby="titulo-resultados"
+          hidden
+        >
+          <button class="volver" type="button" data-volver="inicio">
+            ← Modificar búsqueda
+          </button>
+
+          <h1 id="titulo-resultados" tabindex="-1">Resultados</h1>
+
+          <p id="resumen-busqueda" class="introduccion"></p>
+          <p id="cantidad-resultados" class="contador"></p>
+
+          <div id="lista-canchas"></div>
+        </section>
+
+        <!-- Pantalla 3: detalle -->
+        <section
+          id="detalle"
+          class="pantalla"
+          aria-labelledby="titulo-detalle"
+          hidden
+        >
+          <button class="volver" type="button" data-volver="resultados">
+            ← Volver a resultados
+          </button>
+
+          <p class="antetitulo">Información del recinto</p>
+          <h1 id="titulo-detalle" tabindex="-1"></h1>
+
+          <p id="descripcion-cancha" class="introduccion"></p>
+          <dl id="datos-cancha" class="datos"></dl>
+
+          <button id="ver-horarios" class="boton principal ancho" type="button">
+            Ver horarios disponibles
+          </button>
+        </section>
+
+        <!-- Pantalla 4: horarios -->
+        <section
+          id="horarios"
+          class="pantalla"
+          aria-labelledby="titulo-horarios"
+          hidden
+        >
+          <button class="volver" type="button" data-volver="detalle">
+            ← Volver al detalle
+          </button>
+
+          <h1 id="titulo-horarios" tabindex="-1">Selecciona un horario</h1>
+          <p id="contexto-horarios" class="introduccion"></p>
+
+          <fieldset class="selector-horarios">
+            <legend>Bloques de una hora</legend>
+            <p class="ayuda">Los horarios ocupados no pueden seleccionarse.</p>
+
+            <div id="lista-horarios" class="cuadricula-horarios"></div>
+          </fieldset>
+
+          <p id="seleccion-horario" class="seleccion" aria-live="polite">
+            Aún no has seleccionado un horario.
+          </p>
+
+          <button
+            id="continuar-resumen"
+            class="boton principal ancho"
+            type="button"
+            disabled
+          >
+            Continuar al resumen
+          </button>
+        </section>
+
+        <!-- Pantalla 5: resumen -->
+        <section
+          id="resumen"
+          class="pantalla"
+          aria-labelledby="titulo-resumen"
+          hidden
+        >
+          <button class="volver" type="button" data-volver="horarios">
+            ← Cambiar horario
+          </button>
+
+          <p class="antetitulo">Revisa antes de continuar</p>
+          <h1 id="titulo-resumen" tabindex="-1">Resumen de reserva</h1>
+
+          <p class="introduccion">
+            Comprueba los datos. Todavía no has confirmado la reserva.
+          </p>
+
+          <dl id="datos-resumen" class="datos"></dl>
+
+          <div class="aviso">
+            Al confirmar se generará un código de reserva. No se realizará
+            ningún cobro.
+          </div>
+
+          <p id="error-reserva" class="error" role="alert" hidden></p>
+
+          <button
+            id="confirmar-reserva"
+            class="boton principal ancho"
+            type="button"
+          >
+            Confirmar reserva simulada
+          </button>
+        </section>
+
+        <!-- Pantalla 6: confirmación -->
+        <section
+          id="confirmacion"
+          class="pantalla"
+          aria-labelledby="titulo-confirmacion"
+          hidden
+        >
+          <span class="insignia-exito">Reserva simulada registrada</span>
+
+          <h1 id="titulo-confirmacion" tabindex="-1">Reserva confirmada</h1>
+
+          <div class="comprobante">
+            <p>Código de reserva</p>
+            <p id="codigo-reserva" class="codigo"></p>
+          </div>
+
+          <dl id="datos-confirmacion" class="datos"></dl>
+
+          <p id="estado-guardado" class="ayuda"></p>
+
+          <button
+            id="nueva-busqueda"
+            class="boton principal ancho"
+            type="button"
+          >
+            Buscar otra cancha
+          </button>
+        </section>
+      </main>
+
+      <footer>Interacción Humano-Computador · Prototipo de reserva</footer>
+    </div>
+  </body>
+</html>
